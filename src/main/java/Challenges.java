@@ -1,4 +1,5 @@
 /* (C)2024 */
+import java.math.BigInteger;
 import java.util.Collections;
 import java.util.List;
 
@@ -82,10 +83,28 @@ public class Challenges {
     because 1^1 + 2^2 + 3^3 + 4^4 + 5^5 + 6^6 + 7^7 + 8^8 + 9^9 + 10^10 = 10405071317
     The last 3 digits for the sum of powers from 1 to 10 is "317"
     ***** */
-
     public String ownPower(int number, int lastDigits) {
         // YOUR CODE HERE...
-        return "";
+        long sum = 0;
+
+        // iterate over the numbers and calculate the power
+        for (int i = 1; i <= number; i++) {
+            long power = 1;
+
+            // iterate over the power
+            for (int j = 1; j <= i; j++) {
+
+                // calculate the power
+                power *= i;
+                // get the last 3 digits
+                power %= 1000;
+            }
+            // sum the power
+            sum += power;
+            // get the last 3 digits
+            sum %= 1000;
+        }
+        return String.format("%0" + lastDigits + "d", sum);
     }
     ;
 
@@ -107,8 +126,21 @@ public class Challenges {
     ***** */
 
     public Integer digitSum(int n) {
-        // YOUR CODE HERE...
-        return 1;
+        // BigInteger can represent integers of any magnitude, limited only by the available memory on the system.
+        BigInteger factorial = BigInteger.ONE;
+
+        for (int i = 1; i <= n; i++) {
+            factorial = factorial.multiply(BigInteger.valueOf(i));
+        }
+
+        // Convert the factorial to a string and sum the digits
+        int sum = 0;
+        String factorialString = factorial.toString();
+        for (int i = 0; i < factorialString.length(); i++) {
+            sum += Character.getNumericValue(factorialString.charAt(i));
+        }
+
+        return sum;
     }
 
     /**
