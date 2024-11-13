@@ -1,5 +1,6 @@
 /* (C)2024 */
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -142,12 +143,26 @@ public class Challenges {
      */
     public String decrypt(List<Integer> ascivalues) {
         // YOUR CODE HERE...
-        return "";
+        StringBuilder decryptedString = new StringBuilder();
+        int prevValue = 0;
+
+        for (int asciiValue : ascivalues) {
+            // sum the previous value with the current value
+            int decryptedValue = prevValue + asciiValue;
+
+            // update the previous value
+            prevValue = decryptedValue;
+
+            // append the decrypted value to the string
+            decryptedString.append((char) decryptedValue);
+        }
+
+        return decryptedString.toString();
     }
 
     /**
      * Encryption Function.
-     * Create am encryption function that takes a string and converts into an array of ASCII character values.
+     * Create an encryption function that takes a string and converts into an array of ASCII character values.
      * encrypt("Hello") ➞ [72, 29, 7, 0, 3]
      * // H = 72, the difference between the H and e is 29
      * The function must return an array of integer ascii values.
@@ -156,6 +171,20 @@ public class Challenges {
      */
     public List<Integer> encrypt(String text) {
         // YOUR CODE HERE...
-        return Collections.emptyList();
+        // Create a list to store the ASCII values
+        List<Integer> asciiValues = new ArrayList<>();
+
+        // Iterate over the characters of the text
+        for (int i = 0; i < text.length(); i++) {
+            // Get the ASCII value of the character
+            int asciiValue = text.charAt(i);
+
+            int difference = asciiValue - (i == 0 ? 0 : text.charAt(i - 1));
+
+            // Add the ASCII value to the list
+            asciiValues.add(difference);
+        }
+
+        return asciiValues;
     }
 }
