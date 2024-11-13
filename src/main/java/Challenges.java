@@ -21,7 +21,10 @@ public class Challenges {
 
     public String readableTime(Integer seconds) {
         // YOUR CODE HERE...
-        return "";
+        int hours = seconds / 3600;
+        int minutes = (seconds % 3600) / 60;
+        int sec = seconds % 60;
+        return String.format("%02d:%02d:%02d", hours, minutes, sec);
     }
     ;
 
@@ -44,8 +47,19 @@ public class Challenges {
 
     public String[] circularArray(int index) {
         String[] COUNTRY_NAMES = {"Germany", "Norway", "Island", "Japan", "Israel"};
+
+        // Validate the index should be a positive number
+        if (index < 0) {
+            return new String[]{};
+        }
+
         // YOUR CODE HERE...
-        return COUNTRY_NAMES;
+        String[] result = new String[COUNTRY_NAMES.length];
+        for (int i = 0; i < COUNTRY_NAMES.length; i++) {
+            // in result array, the first element should be the index element
+            result[i] = COUNTRY_NAMES[(index + i) % COUNTRY_NAMES.length];
+        }
+        return result;
     }
     ;
 
