@@ -85,26 +85,14 @@ public class Challenges {
     ***** */
     public String ownPower(int number, int lastDigits) {
         // YOUR CODE HERE...
-        long sum = 0;
+        BigInteger sum = BigInteger.ZERO;
 
-        // iterate over the numbers and calculate the power
         for (int i = 1; i <= number; i++) {
-            long power = 1;
-
-            // iterate over the power
-            for (int j = 1; j <= i; j++) {
-
-                // calculate the power
-                power *= i;
-                // get the last 3 digits
-                power %= 1000;
-            }
-            // sum the power
-            sum += power;
-            // get the last 3 digits
-            sum %= 1000;
+            BigInteger power = BigInteger.valueOf(i).pow(i);
+            sum = sum.add(power);
         }
-        return String.format("%0" + lastDigits + "d", sum);
+
+        return sum.toString().substring(sum.toString().length() - lastDigits);
     }
     ;
 
