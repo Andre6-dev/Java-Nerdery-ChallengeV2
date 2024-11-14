@@ -69,18 +69,24 @@ public class ChallengeStream {
     private double calculateInternationalCost(int duration) {
         // If the duration is more than the base minutes, calculate the cost for the additional minutes
 
-        return duration <= BASE_MINUTES ?
-                INTERNATIONAL_FIRST_3_MIN :
-                // The baseCost + the additional cost for the remaining minutes
-                INTERNATIONAL_FIRST_3_MIN + (duration - BASE_MINUTES) * INTERNATIONAL_ADDITIONAL_MIN;
+        double total = 0.00;
+        if (duration <= BASE_MINUTES) {
+            total += INTERNATIONAL_FIRST_3_MIN * duration;
+        } else {
+            total += (INTERNATIONAL_ADDITIONAL_MIN * (duration - BASE_MINUTES)) + (BASE_MINUTES * INTERNATIONAL_FIRST_3_MIN);
+        }
+        return total;
     }
 
     private double calculateNationalCost(int duration) {
         // If the duration is more than the base minutes, calculate the cost for the additional minutes
-        return duration <= BASE_MINUTES ?
-                NATIONAL_FIRST_3_MIN :
-                // The baseCost + the additional cost for the remaining minutes
-                NATIONAL_FIRST_3_MIN + (duration - BASE_MINUTES) * NATIONAL_ADDITIONAL_MIN;
+        double total = 0.00;
+        if (duration <= BASE_MINUTES) {
+            total += NATIONAL_FIRST_3_MIN * duration;
+        } else {
+            total += (NATIONAL_ADDITIONAL_MIN * (duration - BASE_MINUTES)) + (BASE_MINUTES * NATIONAL_FIRST_3_MIN);
+        }
+        return total;
     }
 
     private double calculateLocalCost(int duration) {
