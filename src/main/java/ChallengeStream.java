@@ -1,28 +1,18 @@
 /* (C)2024 */
 import java.util.List;
 import mocks.CallCostObject;
+import mocks.CallSummary;
 import mocks.CardWinner;
 import mocks.TotalSummary;
 
 public class ChallengeStream {
 
-    /**
-     * One stack containing five numbered cards from 0-9 are given to both players. Calculate which hand has winning number.
-     * The winning number is calculated by which hard produces the highest two-digit number.
-     *
-     * calculateWinningHand([2, 5, 2, 6, 9], [3, 7, 3, 1, 2]) ➞ true
-     *  P1 can make the number 96
-     *  P2 can make the number 73
-     *  P1 win the round since 96 > 73
-     *
-     * The function must return which player hand is the winner and the two-digit number produced. The solution must contain streams.
-     *
-     * @param player1  hand, player2 hand
-     */
-    public CardWinner calculateWinningHand(List<Integer> player1, List<Integer> player2) {
-        // YOUR CODE HERE...
-        return new CardWinner();
-    }
+    private static final double INTERNATIONAL_FIRST_3_MIN = 7.56;
+    private static final double INTERNATIONAL_ADDITIONAL_MIN = 3.03;
+    private static final double NATIONAL_FIRST_3_MIN = 1.20;
+    private static final double NATIONAL_ADDITIONAL_MIN = 0.48;
+    private static final double LOCAL_PER_MIN = 0.2;
+    private static final int BASE_MINUTES = 3;
 
     /**
      * Design a solution to calculate what to pay for a set of phone calls. The function must receive an
@@ -44,6 +34,85 @@ public class ChallengeStream {
      */
     public TotalSummary calculateCost(List<CallCostObject> costObjectList) {
         // YOUR CODE HERE...
-        return new TotalSummary();
+
+        List<CallSummary> callSummaries = costObjectList.stream()
+                .map(call -> new CallSummary(call, calculateCallCost(call)))
+                .toList();
+
+        // get the total cost of all calls
+        double totalCost = callSummaries.stream()
+                .mapToDouble(CallSummary::getTotalCost)
+                .sum();
+
+        // Validate the type of the call to get the size if it is not National, International or Local dont count it
+        long totalCalls = callSummaries.stream()
+                .filter(call -> call.getCallCostObject().getType().equals("National") ||
+                        call.getCallCostObject().getType().equals("International") ||
+                        call.getCallCostObject().getType().equals("Local"))
+                .count();
+
+        return new TotalSummary(
+                callSummaries,
+                (int) totalCalls,
+                totalCost);
+    }
+
+    private Double calculateCallCost(CallCostObject call) {
+        return switch (call.getType()) {
+            case "International" -> calculateInternationalCost(call.getDuration());
+            case "National" -> calculateNationalCost(call.getDuration());
+            case "Local" -> calculateLocalCost(call.getDuration());
+            default -> 0.0;
+        };
+    }
+
+    private double calculateInternationalCost(int duration) {
+        // If the duration is more than the base minutes, calculate the cost for the additional minutes
+
+        return duration <= BASE_MINUTES ?
+                INTERNATIONAL_FIRST_3_MIN :
+                // The baseCost + the additional cost for the remaining minutes
+                INTERNATIONAL_FIRST_3_MIN + (duration - BASE_MINUTES) * INTERNATIONAL_ADDITIONAL_MIN;
+    }
+
+    private double calculateNationalCost(int duration) {
+        // If the duration is more than the base minutes, calculate the cost for the additional minutes
+        return duration <= BASE_MINUTES ?
+                NATIONAL_FIRST_3_MIN :
+                // The baseCost + the additional cost for the remaining minutes
+                NATIONAL_FIRST_3_MIN + (duration - BASE_MINUTES) * NATIONAL_ADDITIONAL_MIN;
+    }
+
+    private double calculateLocalCost(int duration) {
+        // In local it doesn't charge for the first minutes
+        return duration * LOCAL_PER_MIN;
+    }
+
+    /**
+     * One stack containing five numbered cards from 0-9 are given to both players. Calculate which hand has winning number.
+     * The winning number is calculated by which hard produces the highest two-digit number.
+     *
+     * calculateWinningHand([2, 5, 2, 6, 9], [3, 7, 3, 1, 2]) ➞ true
+     *  P1 can make the number 96
+     *  P2 can make the number 73
+     *  P1 win the round since 96 > 73
+     *
+     * The function must return which player hand is the winner and the two-digit number produced. The solution must contain streams.
+     *
+     * @param player1  hand, player2 hand
+     */
+    public CardWinner calculateWinningHand(List<Integer> player1, List<Integer> player2) {
+        // YOUR CODE HERE...
+        // Calculate sum for each player using streams
+        int player1Sum = player1.stream()
+                .mapToInt(Integer::intValue)
+                .sum();
+
+        int player2Sum = player2.stream()
+                .mapToInt(Integer::intValue)
+                .sum();
+
+        // return the winner and the winning number
+        return new CardWinner(player1Sum > player2Sum ? "P1" : "P2", Math.max(player1Sum, player2Sum));
     }
 }
