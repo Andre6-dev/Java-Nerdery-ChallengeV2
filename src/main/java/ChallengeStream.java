@@ -109,16 +109,26 @@ public class ChallengeStream {
      */
     public CardWinner calculateWinningHand(List<Integer> player1, List<Integer> player2) {
         // YOUR CODE HERE...
-        // Calculate sum for each player using streams
-        int player1Sum = player1.stream()
-                .mapToInt(Integer::intValue)
-                .sum();
+        // Calculate highest two-digit number for each player using streams
+        int player1Max = player1.stream()
+                // create a stream of all possible two-digit numbers
+                .flatMap(d1 -> player1.stream()
+                        .filter(d2 -> !d2.equals(d1)) // ensure that the two digits are different
+                        .map(d2 -> d1 * 10 + d2)) // combine the two digits to form a two-digit number
+                .max(Integer::compareTo)// get the highest two-digit number
+                .orElse(0);
 
-        int player2Sum = player2.stream()
-                .mapToInt(Integer::intValue)
-                .sum();
+        int player2Max = player2.stream()
+                .flatMap(d1 -> player2.stream()
+                        .filter(d2 -> !d2.equals(d1))
+                        .map(d2 -> d1 * 10 + d2))
+                .max(Integer::compareTo)
+                .orElse(0);
 
-        // return the winner and the winning number
-        return new CardWinner(player1Sum > player2Sum ? "P1" : "P2", Math.max(player1Sum, player2Sum));
+        // return the winner and the winning number and if bot players have the same number return TIE
+        return new CardWinner(player1Max > player2Max
+                ? "P1" : player1Max == player2Max
+                ? "TIE" : "P2",
+                Math.max(player1Max, player2Max));
     }
 }
