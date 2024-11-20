@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+
+// Final Solution: Using ConcurrentHashMap to store the metrics for each entry and then calculate the statistics
 public class WeatherAnalyzerOption2 {
 
     // Track the metrics for each entry
