@@ -108,8 +108,7 @@ public class ChallengeStream {
      * @param player1  hand, player2 hand
      */
     public CardWinner calculateWinningHand(List<Integer> player1, List<Integer> player2) {
-        // YOUR CODE HERE...
-        // Calculate highest two-digit number for each player using streams
+
         int player1Max = player1.stream()
                 // create a stream of all possible two-digit numbers
                 .flatMap(d1 -> player1.stream()

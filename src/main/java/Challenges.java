@@ -23,6 +23,11 @@ public class Challenges {
 
     public String readableTime(Integer seconds) {
         // YOUR CODE HERE...
+
+        if (seconds < 0) {
+            return "";
+        }
+
         int hours = seconds / 3600;
         int minutes = (seconds % 3600) / 60;
         int sec = seconds % 60;
@@ -58,7 +63,7 @@ public class Challenges {
         // YOUR CODE HERE...
         String[] result = new String[COUNTRY_NAMES.length];
         for (int i = 0; i < COUNTRY_NAMES.length; i++) {
-            // in result array, the first element should be the index element
+            // Using the modulo operator ensure that if the index is greater than the length of the array, it will wrap around
             result[i] = COUNTRY_NAMES[(index + i) % COUNTRY_NAMES.length];
         }
         return result;
@@ -89,11 +94,13 @@ public class Challenges {
         BigInteger sum = BigInteger.ZERO;
 
         for (int i = 1; i <= number; i++) {
+            // Calculate the power of the number and add it to the sum
             BigInteger power = BigInteger.valueOf(i).pow(i);
             sum = sum.add(power);
         }
 
-        return sum.toString().substring(sum.toString().length() - lastDigits);
+        return sum.toString()
+                .substring(sum.toString().length() - lastDigits);
     }
     ;
 
@@ -142,7 +149,6 @@ public class Challenges {
      * @param ascivalues  hand, player2 hand
      */
     public String decrypt(List<Integer> ascivalues) {
-        // YOUR CODE HERE...
         StringBuilder decryptedString = new StringBuilder();
         int prevValue = 0;
 
@@ -171,17 +177,13 @@ public class Challenges {
      */
     public List<Integer> encrypt(String text) {
         // YOUR CODE HERE...
-        // Create a list to store the ASCII values
         List<Integer> asciiValues = new ArrayList<>();
 
-        // Iterate over the characters of the text
         for (int i = 0; i < text.length(); i++) {
-            // Get the ASCII value of the character
-            int asciiValue = text.charAt(i);
 
+            int asciiValue = text.charAt(i);
             int difference = asciiValue - (i == 0 ? 0 : text.charAt(i - 1));
 
-            // Add the ASCII value to the list
             asciiValues.add(difference);
         }
 

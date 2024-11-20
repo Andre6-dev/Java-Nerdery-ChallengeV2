@@ -9,12 +9,14 @@ import java.util.Map;
 import java.util.OptionalDouble;
 import java.util.stream.Collectors;
 
-public class WeatherAnalyzer {
+
+// Solution 1: Using Java Streams and Collectors -> Less efficient because the json file is stored in memory and doesn't complete all the operations in parallel
+public class WeatherAnalyzerOption1 {
 
     public static void analyzeWeatherData() throws IOException {
 
         // Load weather data from JSON file
-        InputStream inputStream = WeatherAnalyzer.class.getClassLoader().getResourceAsStream("weather.json");
+        InputStream inputStream = WeatherAnalyzerOption1.class.getClassLoader().getResourceAsStream("weather.json");
 
         if (inputStream == null) {
             throw new IOException("File not found");
@@ -29,12 +31,20 @@ public class WeatherAnalyzer {
                 mapper.getTypeFactory().constructCollectionType(List.class, Weather.class)
         );
 
+        // Filter all records that have negative a empty values
+        List<Weather> total = records.stream()
+                .filter(r -> r.getAirtemp() >= 0 && r.getAtmosphericpressure() >= 0 && r.getGustspeed() >= 0 &&
+                        r.getPrecipitation() >= 0 && r.getRelativehumidity() >= 0 && r.getSolar() >= 0 &&
+                        r.getStrikedistance() >= 0 && r.getStrikes() >= 0 && r.getVapourpressure() >= 0 &&
+                        r.getWindspeed() >= 0)
+                .collect(Collectors.toList());
+
         // Total statistics
         System.out.println("Total Statistics are:");
-        printMetricStats(records);
+        printMetricStats(total);
 
         // Per day statistics
-        Map<String, List<Weather>> recordsByDay = records.stream()
+        Map<String, List<Weather>> recordsByDay = total.stream()
                 .collect(Collectors.groupingBy(r ->
                         r.getDayofweek() + " " + r.getYear() + "-" + r.getMonth() + "-" + r.getTime()));
 
@@ -75,7 +85,10 @@ public class WeatherAnalyzer {
 
     public static void main(String[] args) {
         try {
+            long startTime = System.currentTimeMillis();
             analyzeWeatherData();
+            long endTime = System.currentTimeMillis();
+            System.out.println("\nExecution time: " + (endTime - startTime) + "ms");
         } catch (IOException e) {
             e.printStackTrace();
         }
