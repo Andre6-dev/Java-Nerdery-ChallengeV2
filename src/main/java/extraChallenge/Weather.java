@@ -3,7 +3,7 @@ package extraChallenge;
 public class Weather {
     private String dev_id;
     private String name;
-    private LocationJson location;
+    private Location location;
     private String keep_record;
     private String time;
     private String year;
@@ -24,7 +24,7 @@ public class Weather {
     public Weather() {
     }
 
-    public Weather(String dev_id, String name, LocationJson location, String keep_record, String time, String year, String month, String dayofweek, double airtemp, double atmosphericpressure, double gustspeed, double precipitation, double relativehumidity, double solar, double strikedistance, double strikes, double vapourpressure, double winddirection, double windspeed) {
+    public Weather(String dev_id, String name, Location location, String keep_record, String time, String year, String month, String dayofweek, double airtemp, double atmosphericpressure, double gustspeed, double precipitation, double relativehumidity, double solar, double strikedistance, double strikes, double vapourpressure, double winddirection, double windspeed) {
         this.dev_id = dev_id;
         this.name = name;
         this.location = location;
@@ -62,11 +62,11 @@ public class Weather {
         this.name = name;
     }
 
-    public LocationJson getLocation() {
+    public Location getLocation() {
         return location;
     }
 
-    public void setLocation(LocationJson location) {
+    public void setLocation(Location location) {
         this.location = location;
     }
 
@@ -196,34 +196,5 @@ public class Weather {
 
     public void setWindspeed(double windspeed) {
         this.windspeed = windspeed;
-    }
-}
-
-class LocationJson {
-    private double lon;
-    private double lat;
-
-    public LocationJson() {
-    }
-
-    public LocationJson(double lon, double lat) {
-        this.lon = lon;
-        this.lat = lat;
-    }
-
-    public double getLon() {
-        return lon;
-    }
-
-    public void setLon(double lon) {
-        this.lon = lon;
-    }
-
-    public double getLat() {
-        return lat;
-    }
-
-    public void setLat(double lat) {
-        this.lat = lat;
     }
 }

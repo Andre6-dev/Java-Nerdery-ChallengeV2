@@ -1,6 +1,5 @@
 package extraChallenge;
 
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
@@ -12,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 
 // Final Solution: Using ConcurrentHashMap to store the metrics for each entry and then calculate the statistics
-public class WeatherAnalyzerOption2 {
+public class WeatherAnalyzer {
 
     // Track the metrics for each entry
     private static class MetricStats {
@@ -35,7 +34,7 @@ public class WeatherAnalyzerOption2 {
 
     public static void analyzeWeatherData() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        InputStream inputStream = WeatherAnalyzerOption2.class
+        InputStream inputStream = WeatherAnalyzer.class
                 .getClassLoader().getResourceAsStream("weather.json");
 
         if (inputStream == null) {
@@ -102,7 +101,6 @@ public class WeatherAnalyzerOption2 {
 
     private static boolean isValidRecord(Weather record) {
         return record != null
-                && record.getAirtemp() >= 0
                 && record.getAtmosphericpressure() >= 0
                 && record.getGustspeed() >= 0
                 && record.getPrecipitation() >= 0

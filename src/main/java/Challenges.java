@@ -99,7 +99,8 @@ public class Challenges {
             sum = sum.add(power);
         }
 
-        return sum.toString()
+        return sum
+                .toString()
                 .substring(sum.toString().length() - lastDigits);
     }
     ;
