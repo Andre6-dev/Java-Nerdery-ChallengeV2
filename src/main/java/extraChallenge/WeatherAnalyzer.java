@@ -42,6 +42,7 @@ public class WeatherAnalyzer {
         }
 
         // Maps to store statistics
+        // The ConcurrentHashMap is thread-safe and allows modification while iteration.
         Map<String, MetricStats> totalStats = new ConcurrentHashMap<>();
         Map<String, Map<String, MetricStats>> dailyStats = new ConcurrentHashMap<>();
 

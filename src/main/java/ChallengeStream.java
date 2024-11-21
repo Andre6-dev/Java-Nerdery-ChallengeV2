@@ -37,8 +37,6 @@ public class ChallengeStream {
      * @returns {CallsResponse}  - Processed information
      */
     public TotalSummary calculateCost(List<CallCostObject> costObjectList) {
-        // YOUR CODE HERE...
-
         List<CallSummary> callSummaries = costObjectList.stream()
                 .map(call -> new CallSummary(call, calculateCallCost(call)))
                 .toList();
