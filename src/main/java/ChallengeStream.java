@@ -14,6 +14,10 @@ public class ChallengeStream {
     private static final double LOCAL_PER_MIN = 0.2;
     private static final int BASE_MINUTES = 3;
 
+    private static final String INTERNATIONAL = "International";
+    private static final String NATIONAL = "National";
+    private static final String LOCAL = "Local";
+
     /**
      * Design a solution to calculate what to pay for a set of phone calls. The function must receive an
      * array of objects that will contain the identifier, type and duration attributes. For the type attribute,
@@ -59,39 +63,40 @@ public class ChallengeStream {
 
     private Double calculateCallCost(CallCostObject call) {
         return switch (call.getType()) {
-            case "International" -> calculateInternationalCost(call.getDuration());
-            case "National" -> calculateNationalCost(call.getDuration());
-            case "Local" -> calculateLocalCost(call.getDuration());
+            case INTERNATIONAL -> calculateCostByType(call.getDuration(), INTERNATIONAL);
+            case NATIONAL -> calculateCostByType(call.getDuration(), NATIONAL);
+            case LOCAL -> calculateCostByType(call.getDuration(), LOCAL);
             default -> 0.0;
         };
     }
 
-    private double calculateInternationalCost(int duration) {
-        // If the duration is more than the base minutes, calculate the cost for the additional minutes
-
+    private double calculateCostByType(int duration, String type) {
         double total = 0.00;
-        if (duration <= BASE_MINUTES) {
-            total += INTERNATIONAL_FIRST_3_MIN * duration;
-        } else {
-            total += (INTERNATIONAL_ADDITIONAL_MIN * (duration - BASE_MINUTES)) + (BASE_MINUTES * INTERNATIONAL_FIRST_3_MIN);
-        }
-        return total;
-    }
+        double first3MinRate;
+        double additionalMinRate;
 
-    private double calculateNationalCost(int duration) {
-        // If the duration is more than the base minutes, calculate the cost for the additional minutes
-        double total = 0.00;
-        if (duration <= BASE_MINUTES) {
-            total += NATIONAL_FIRST_3_MIN * duration;
-        } else {
-            total += (NATIONAL_ADDITIONAL_MIN * (duration - BASE_MINUTES)) + (BASE_MINUTES * NATIONAL_FIRST_3_MIN);
+        switch (type) {
+            case INTERNATIONAL -> {
+                first3MinRate = INTERNATIONAL_FIRST_3_MIN;
+                additionalMinRate = INTERNATIONAL_ADDITIONAL_MIN;
+            }
+            case NATIONAL -> {
+                first3MinRate = NATIONAL_FIRST_3_MIN;
+                additionalMinRate = NATIONAL_ADDITIONAL_MIN;
+            }
+            case LOCAL -> {
+                return duration * LOCAL_PER_MIN;
+            }
+            default -> throw new IllegalArgumentException("Invalid call type");
         }
-        return total;
-    }
 
-    private double calculateLocalCost(int duration) {
-        // In local it doesn't charge for the first minutes
-        return duration * LOCAL_PER_MIN;
+        if (duration <= BASE_MINUTES) {
+            total = first3MinRate * duration;
+        } else {
+            total = (additionalMinRate * (duration - BASE_MINUTES)) + (BASE_MINUTES * first3MinRate);
+        }
+
+        return total;
     }
 
     /**
