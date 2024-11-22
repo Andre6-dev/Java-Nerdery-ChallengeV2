@@ -1,5 +1,7 @@
 /* (C)2024 */
 import java.util.List;
+import java.util.Objects;
+
 import mocks.CallCostObject;
 import mocks.CallSummary;
 import mocks.CardWinner;
@@ -60,20 +62,11 @@ public class ChallengeStream {
     }
 
     private Double calculateCallCost(CallCostObject call) {
-        return switch (call.getType()) {
-            case INTERNATIONAL -> calculateCostByType(call.getDuration(), INTERNATIONAL);
-            case NATIONAL -> calculateCostByType(call.getDuration(), NATIONAL);
-            case LOCAL -> calculateCostByType(call.getDuration(), LOCAL);
-            default -> 0.0;
-        };
-    }
-
-    private double calculateCostByType(int duration, String type) {
-        double total = 0.00;
         double first3MinRate;
         double additionalMinRate;
+        int duration = call.getDuration();
 
-        switch (type) {
+        switch (call.getType()) {
             case INTERNATIONAL -> {
                 first3MinRate = INTERNATIONAL_FIRST_3_MIN;
                 additionalMinRate = INTERNATIONAL_ADDITIONAL_MIN;
@@ -85,16 +78,16 @@ public class ChallengeStream {
             case LOCAL -> {
                 return duration * LOCAL_PER_MIN;
             }
-            default -> throw new IllegalArgumentException("Invalid call type");
+            default -> {
+                return 0.0;
+            }
         }
 
         if (duration <= BASE_MINUTES) {
-            total = first3MinRate * duration;
+            return first3MinRate * duration;
         } else {
-            total = (additionalMinRate * (duration - BASE_MINUTES)) + (BASE_MINUTES * first3MinRate);
+            return (additionalMinRate * (duration - BASE_MINUTES)) + (BASE_MINUTES * first3MinRate);
         }
-
-        return total;
     }
 
     /**

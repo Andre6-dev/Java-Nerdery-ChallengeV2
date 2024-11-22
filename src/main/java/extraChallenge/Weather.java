@@ -9,22 +9,21 @@ public class Weather {
     private String year;
     private String month;
     private String dayofweek;
-    private double airtemp;
-    private double atmosphericpressure;
-    private double gustspeed;
-    private double precipitation;
-    private double relativehumidity;
-    private double solar;
-    private double strikedistance;
-    private double strikes;
-    private double vapourpressure;
-    private double winddirection;
-    private double windspeed;
+    private Double airtemp;
+    private Double atmosphericpressure;
+    private Double gustspeed;
+    private Double precipitation;
+    private Double relativehumidity;
+    private Double solar;
+    private Double strikedistance;
+    private Double strikes;
+    private Double vapourpressure;
+    private Double winddirection;
+    private Double windspeed;
 
-    public Weather() {
-    }
+    public Weather() {}
 
-    public Weather(String dev_id, String name, Location location, String keep_record, String time, String year, String month, String dayofweek, double airtemp, double atmosphericpressure, double gustspeed, double precipitation, double relativehumidity, double solar, double strikedistance, double strikes, double vapourpressure, double winddirection, double windspeed) {
+    public Weather(String dev_id, String name, Location location, String keep_record, String time, String year, String month, String dayofweek, Double airtemp, Double atmosphericpressure, Double gustspeed, Double precipitation, Double relativehumidity, Double solar, Double strikedistance, Double strikes, Double vapourpressure, Double winddirection, Double windspeed) {
         this.dev_id = dev_id;
         this.name = name;
         this.location = location;
@@ -110,91 +109,91 @@ public class Weather {
         this.dayofweek = dayofweek;
     }
 
-    public double getAirtemp() {
+    public Double getAirtemp() {
         return airtemp;
     }
 
-    public void setAirtemp(double airtemp) {
+    public void setAirtemp(Double airtemp) {
         this.airtemp = airtemp;
     }
 
-    public double getAtmosphericpressure() {
+    public Double getAtmosphericpressure() {
         return atmosphericpressure;
     }
 
-    public void setAtmosphericpressure(double atmosphericpressure) {
+    public void setAtmosphericpressure(Double atmosphericpressure) {
         this.atmosphericpressure = atmosphericpressure;
     }
 
-    public double getGustspeed() {
+    public Double getGustspeed() {
         return gustspeed;
     }
 
-    public void setGustspeed(double gustspeed) {
+    public void setGustspeed(Double gustspeed) {
         this.gustspeed = gustspeed;
     }
 
-    public double getPrecipitation() {
+    public Double getPrecipitation() {
         return precipitation;
     }
 
-    public void setPrecipitation(double precipitation) {
+    public void setPrecipitation(Double precipitation) {
         this.precipitation = precipitation;
     }
 
-    public double getRelativehumidity() {
+    public Double getRelativehumidity() {
         return relativehumidity;
     }
 
-    public void setRelativehumidity(double relativehumidity) {
+    public void setRelativehumidity(Double relativehumidity) {
         this.relativehumidity = relativehumidity;
     }
 
-    public double getSolar() {
+    public Double getSolar() {
         return solar;
     }
 
-    public void setSolar(double solar) {
+    public void setSolar(Double solar) {
         this.solar = solar;
     }
 
-    public double getStrikedistance() {
+    public Double getStrikedistance() {
         return strikedistance;
     }
 
-    public void setStrikedistance(double strikedistance) {
+    public void setStrikedistance(Double strikedistance) {
         this.strikedistance = strikedistance;
     }
 
-    public double getStrikes() {
+    public Double getStrikes() {
         return strikes;
     }
 
-    public void setStrikes(double strikes) {
+    public void setStrikes(Double strikes) {
         this.strikes = strikes;
     }
 
-    public double getVapourpressure() {
+    public Double getVapourpressure() {
         return vapourpressure;
     }
 
-    public void setVapourpressure(double vapourpressure) {
+    public void setVapourpressure(Double vapourpressure) {
         this.vapourpressure = vapourpressure;
     }
 
-    public double getWinddirection() {
+    public Double getWinddirection() {
         return winddirection;
     }
 
-    public void setWinddirection(double winddirection) {
+    public void setWinddirection(Double winddirection) {
         this.winddirection = winddirection;
     }
 
-    public double getWindspeed() {
+    public Double getWindspeed() {
         return windspeed;
     }
 
-    public void setWindspeed(double windspeed) {
+    public void setWindspeed(Double windspeed) {
         this.windspeed = windspeed;
     }
 }

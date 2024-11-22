@@ -1,5 +1,8 @@
 package extraChallenge;
 
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
@@ -7,6 +10,7 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 
@@ -58,35 +62,33 @@ public class WeatherAnalyzer {
             totalStats.put(key, new MetricStats());
         });
 
-        // Read the JSON array
-        Weather[] records = mapper.readValue(inputStream, Weather[].class);
+        // Read and process every record in the json in a while
+        JsonParser parser = JsonFactory.builder().build().createParser(inputStream);
+        if (parser.nextToken() == JsonToken.START_ARRAY){
+            while (parser.nextToken() != JsonToken.END_ARRAY) {
+                Weather record = mapper.readValue(parser, Weather.class);
 
-        // Process each record
-        for (Weather record : records) {
+                // Skip invalid records
+                if (isValidRecord(record)) {
+                    continue;
+                }
 
-            // Skip records with missing data
-            if (!isValidRecord(record)) {
-                continue;
-            }
+                // Update total stats
+                updateStats(totalStats, record);
 
-            String dayKey = record.getDayofweek() + " " +
-                    record.getYear() + "-" +
-                    record.getMonth() + "-" +
-                    record.getTime().substring(0, 10);
-
-            // update total stats
-            updateStats(totalStats, record);
-
-            // update daily stats
-            dailyStats.computeIfAbsent(dayKey, k -> {
-                Map<String, MetricStats> stats = new ConcurrentHashMap<>();
-                metricKeys.forEach(key -> {
-                    stats.put(key, new MetricStats());
+                // Update daily stats
+                dailyStats.computeIfAbsent(record.getDayofweek(), k -> {
+                    Map<String, MetricStats> dailyMetrics = new ConcurrentHashMap<>();
+                    metricKeys.forEach(key -> {
+                        dailyMetrics.put(key, new MetricStats());
+                    });
+                    return dailyMetrics;
                 });
-                return stats;
-            });
-            updateStats(dailyStats.get(dayKey), record);
+
+                updateStats(dailyStats.get(record.getDayofweek()), record);
+            }
         }
+
 
         // Print total stats
         System.out.println("Total Statistics are:");
@@ -101,16 +103,16 @@ public class WeatherAnalyzer {
     }
 
     private static boolean isValidRecord(Weather record) {
-        return record != null
-                && record.getAtmosphericpressure() >= 0
-                && record.getGustspeed() >= 0
-                && record.getPrecipitation() >= 0
-                && record.getRelativehumidity() >= 0
-                && record.getSolar() >= 0
-                && record.getStrikedistance() >= 0
-                && record.getStrikes() >= 0
-                && record.getVapourpressure() >= 0
-                && record.getWindspeed() >= 0;
+        return Objects.isNull(record.getAirtemp()) ||
+                Objects.isNull(record.getAtmosphericpressure()) ||
+                Objects.isNull(record.getGustspeed()) ||
+                Objects.isNull(record.getPrecipitation()) ||
+                Objects.isNull(record.getRelativehumidity()) ||
+                Objects.isNull(record.getSolar()) ||
+                Objects.isNull(record.getStrikedistance()) ||
+                Objects.isNull(record.getStrikes()) ||
+                Objects.isNull(record.getVapourpressure()) ||
+                Objects.isNull(record.getWindspeed());
     }
 
     private static void updateStats(Map<String, MetricStats> stats, Weather record) {
